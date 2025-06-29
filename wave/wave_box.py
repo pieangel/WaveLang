@@ -1,10 +1,20 @@
-class WaveBox:
-    def __init__(self, start_time, end_time, start_price, end_price, direction):
-        self.start_time = start_time
-        self.end_time = end_time
-        self.start_price = start_price
-        self.end_price = end_price
-        self.direction = direction  # "up" or "down"
+from .tick import Tick
 
-    def __repr__(self):
-        return f"WaveBox({self.start_time}~{self.end_time}, {self.direction}, ΔP={self.end_price - self.start_price})"
+class WaveBox:
+    def __init__(self, start_tick: Tick):
+        self.start_tick = start_tick
+        self.end_tick = start_tick
+        self.high = start_tick.price
+        self.low = start_tick.price
+        self.volume = start_tick.volume
+        self.ticks = [start_tick]
+
+    def update(self, tick: Tick):
+        self.end_tick = tick
+        self.high = max(self.high, tick.price)
+        self.low = min(self.low, tick.price)
+        self.volume += tick.volume
+        self.ticks.append(tick)
+
+    def __str__(self):
+        return f"[{self.start_tick.time} ~ {self.end_tick.time}] Start: {self.start_tick.price}, End: {self.end_tick.price}, High: {self.high}, Low: {self.low}, Vol: {self.volume}"

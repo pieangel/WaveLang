@@ -1,17 +1,25 @@
+import csv
+from datetime import datetime
 from wave.wave_builder import WaveBuilder
 
-data = [
-    (0, 100), (1, 101), (2, 103),
-    (3, 104), (4, 98), (5, 96), (6, 101)
-]
+def load_csv(filepath):
+    with open(filepath, newline='') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            time = datetime.strptime(row['time'], "%Y-%m-%d %H:%M:%S")
+            price = float(row['price'])
+            yield time, price
+
+# CSV 경로 설정 (예: 'data/sample.csv')
+csv_path = 'data/sample.csv'
 
 builder = WaveBuilder(threshold=5)
 
-for t, price in data:
-    wave = builder.feed(t, price)
+for time, price in load_csv(csv_path):
+    wave = builder.feed(time, price)
     if wave:
-        print("Wave Detected:", wave)
+        print("📡 Wave Detected:", wave)
 
-print("\nAll waves:")
+print("\n📦 All Waves:")
 for w in builder.get_all_waves():
     print(w)
