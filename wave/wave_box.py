@@ -1,6 +1,5 @@
 from .tick import Tick
 
-
 class WaveBox:
     def __init__(self, start_tick: Tick):
         self.start_tick = start_tick
