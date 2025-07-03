@@ -1,5 +1,8 @@
 import csv
 from datetime import datetime
+import plotly.graph_objs as go
+from plotly.subplots import make_subplots
+
 from .tick import Tick
 from .wave_box import WaveBox
 
@@ -39,3 +42,45 @@ class WaveBuilder:
                 self.process_tick(tick)
         self.finalize()
         return self.waves
+
+    def plot_waves(self, title: str = "WaveBox Chart"):
+        if not self.waves:
+            print("No waves to display.")
+            return
+
+        fig = go.Figure()
+
+        x_values = list(range(len(self.waves)))  # 0, 1, 2, ...
+        x_labels = [wave.start_tick.time.strftime('%Y-%m-%d %H:%M:%S') for wave in self.waves]
+
+        for i, wave in enumerate(self.waves):
+            color = 'red' if wave.end_tick.price >= wave.start_tick.price else 'blue'
+
+            fig.add_trace(go.Candlestick(
+                x=[x_values[i]],
+                open=[wave.start_tick.price],
+                close=[wave.end_tick.price],
+                high=[wave.high],
+                low=[wave.low],
+                increasing_line_color='red',
+                decreasing_line_color='blue',
+                showlegend=False
+            ))
+
+        fig.update_layout(
+            title=title,
+            xaxis_title='Wave Start Time',
+            yaxis_title='Price',
+            xaxis=dict(
+                tickmode='array',
+                tickvals=x_values,
+                ticktext=x_labels,
+                tickangle=45,
+                type='category'  # ✅ 시간 간격을 무시하고 붙여서 출력
+            ),
+            margin=dict(l=40, r=40, t=40, b=80),
+            height=600
+        )
+
+        fig.show()
+
