@@ -58,9 +58,10 @@ class WaveBuilder:
         if self.current_wave.direction == Direction.UP:
             if price > self.current_wave.high:
                 self.current_wave.high = price
-            self.current_wave.close = price
+
 
             if price <= self.current_wave.high - self.reverse_size:
+                self.current_wave.close = self.current_wave.high
                 self.waves.append(self.current_wave)
                 self.current_wave = WaveBox(
                     direction=Direction.DOWN,
@@ -75,9 +76,10 @@ class WaveBuilder:
         if self.current_wave.direction == Direction.DOWN:
             if price < self.current_wave.low:
                 self.current_wave.low = price
-            self.current_wave.close = price
+
 
             if price >= self.current_wave.low + self.reverse_size:
+                self.current_wave.close = self.current_wave.low
                 self.waves.append(self.current_wave)
                 self.current_wave = WaveBox(
                     direction=Direction.UP,
@@ -142,14 +144,14 @@ def load_prices_with_time(file_path: str) -> List[Tuple[datetime, float]]:
 # --- 메인 실행 ---
 
 if __name__ == "__main__":
-    file_path = 'data/NQ_TickData/NQ_2009_10.csv'
+    file_path = 'data/NQ_TickData/NQ_2025_05.csv'
 
     print("🔄 데이터를 불러오는 중...")
     data = load_prices_with_time(file_path)
 
     print(f"✅ {len(data):,}개의 틱 데이터를 불러왔습니다.")
 
-    builder = WaveBuilder(box_size=2.5, reverse_count=5)
+    builder = WaveBuilder(box_size=5.0, reverse_count=5)
 
     for timestamp, price in data:
         builder.add_price(price, timestamp)
