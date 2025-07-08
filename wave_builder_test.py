@@ -1,6 +1,6 @@
 import csv
 from datetime import datetime
-from wave.wave_builder import WaveBuilder
+from wave_old.wave_builder import WaveBuilder
 
 if __name__ == "__main__":
     builder = WaveBuilder(threshold=2.5)
