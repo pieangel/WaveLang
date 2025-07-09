@@ -11,9 +11,9 @@ conn = duckdb.connect("wave_data.duckdb")
 # 파라미터 설정
 symbol = "GC"
 year = 2009
-month = 10
-box_size = 0.2
-reverse_count = 3
+month = 11
+box_size = 0.5
+reverse_count = 5
 
 # 한 달치 파동 생성
 waves_by_day = build_waves_from_month(
