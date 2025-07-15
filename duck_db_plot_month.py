@@ -8,16 +8,16 @@ import plotly.io as pio
 conn = duckdb.connect("wave_data.duckdb")
 
 # 파라미터 설정
-symbol = "CL"
-year = 2009
-month = 11
-box_size = 0.05
+symbol = "NQ"
+year = 2025
+month = 5
+box_size = 2.5
 reverse_count = 5
 
 # 한 달치 파동 생성
 waves_by_day = build_waves_from_month(
     conn=conn,
-    table_name="tick_CL",
+    table_name="tick_NQ",
     symbol=symbol,
     year=year,
     month=month,

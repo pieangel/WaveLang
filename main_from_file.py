@@ -8,7 +8,7 @@ print("🔄 데이터를 불러오는 중...")
 data = load_prices_with_time(file_path)
 print(f"✅ {len(data):,}개의 틱 데이터를 불러왔습니다.")
 
-builder = WaveBuilder(box_size=25.0, reverse_count=5)
+builder = WaveBuilder(box_size=5.0, reverse_count=5)
 for timestamp, price in data:
     builder.add_price(price, timestamp)
 builder.finalize()
